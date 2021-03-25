@@ -41,30 +41,34 @@ def selection():
     return best
 
 
-# Crossover at random point from 1 to 18 & generate new population
-# Takes the highest and crosses it over with the lowest
+# Crossover of the top twenty of the population
 
 def crossover(pop):
     end = len(bestPop) - 1
 
     newPop = []
-    # do it so it choses 2 random people who dont have the same value
+
+    # Person A crosses over with a list of 5 people
+
     for i in range(0, end, 2):
         crossPoint = (random.randint(1, len(range(stringLen - 2))))
         crossPoint2 = stringLen - crossPoint
 
-        random.sample(range(1, 20, 5))
-        listA = pop[bestPop[i]]
-        listB = pop[bestPop[end - i]]
+        personA = pop[bestPop[i]]
 
-        sizes = [crossPoint, crossPoint2]
-        parA1, parA2 = splitList(sizes, listA)
-        parB1, parB2 = splitList(sizes, listB)
+        peopleB = random.sample(range(1, 20), 5)
 
-        childA = list(chain(parA1, parB2))
-        childB = list(chain(parB1, parA2))
-        newPop.append(childA)
-        newPop.append(childB)
+        for j in range(len(peopleB)):
+            personB = pop[bestPop[peopleB[j]]]
+
+            sizes = [crossPoint, crossPoint2]
+            parA1, parA2 = splitList(sizes, personA)
+            parB1, parB2 = splitList(sizes, personB)
+
+            childA = list(chain(parA1, parB2))
+            childB = list(chain(parB1, parA2))
+            newPop.append(childA)
+            newPop.append(childB)
 
     pop = newPop
     return pop
@@ -96,18 +100,20 @@ def mutation(person):
 
 if __name__ == '__main__':
     currPop = initialisePopValues()
-
+    avg = 0
     # Here will be loop until convergence
-    fitness = calcFitness()
+    while avg < 350:
+        fitness = calcFitness()
 
-    fitness.pop(0)
-    bestPop = selection()
+        fitness.pop(0)
+        bestPop = selection()
 
-    perfect_condition = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
-                         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1']
-    pop = crossover(currPop)
+        perfect_condition = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+                             '1', '1', '1', '1', '1', '1', '1', '1', '1', '1']
+        pop = crossover(currPop)
 
-    # Takes each member of the population and mutates with set probability
-    for i in range(len(pop)):
-        if decision(probOfMutation):
-            pop[i] = mutation(pop[i])
+        # Takes each member of the population and mutates with set probability
+        for i in range(len(pop)):
+            if decision(probOfMutation):
+                pop[i] = mutation(pop[i])
+
