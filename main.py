@@ -1,6 +1,5 @@
 import random
 from itertools import chain
-
 import numpy as np
 
 stringLen = 20
@@ -16,15 +15,16 @@ def initialisePopValues():
 
 
 # Calculate Fitness
-def calcFitness(pop):
-    for i in range(popSize):
+def calcFitness(population):
 
+    for i in range(popSize):
         num = 0
         for j in range(stringLen):
-            if pop[i][j] == '1':
+            if population[i][j] == '1':
                 num = num + 1
 
         fitness.append(num)
+        print(len(fitness))
     return fitness
 
 
@@ -106,6 +106,7 @@ if __name__ == '__main__':
     pop = initialPop
     # Here will be loop until convergence
     while avg < 390:
+        # list doubles from 100 to 200 when it goes into fitness
         fitness = calcFitness(pop)
 
         fitness.pop(0)
