@@ -16,24 +16,24 @@ def initialisePopValues():
 
 
 # Calculate Fitness
-def calcFitness():
+def calcFitness(pop):
     for i in range(popSize):
 
         num = 0
         for j in range(stringLen):
-            if currPop[i][j] == '1':
+            if pop[i][j] == '1':
                 num = num + 1
 
         fitness.append(num)
     return fitness
 
 
-def selection():
+def selection(fit):
     sumOf = 0
-    best = sorted(range(len(fitness)), key=lambda i: fitness[i])[division:]
+    best = sorted(range(len(fit)), key=lambda i: fit[i])[division:]
 
     for j in best:
-        sumOf += fitness[j]
+        sumOf += fit[j]
 
     print("Sum of Top 20s Fitness = " + str(sumOf))
     avg = sumOf / -division
@@ -43,8 +43,8 @@ def selection():
 
 # Crossover of the top twenty of the population
 
-def crossover(pop):
-    end = len(bestPop) - 1
+def crossover(top20):
+    end = len(top20) - 1
 
     newPop = []
 
@@ -54,12 +54,12 @@ def crossover(pop):
         crossPoint = (random.randint(1, len(range(stringLen - 2))))
         crossPoint2 = stringLen - crossPoint
 
-        personA = pop[bestPop[i]]
+        personA = pop[top20[i]]
 
         peopleB = random.sample(range(1, 20), 5)
 
         for j in range(len(peopleB)):
-            personB = pop[bestPop[peopleB[j]]]
+            personB = pop[top20[peopleB[j]]]
 
             sizes = [crossPoint, crossPoint2]
             parA1, parA2 = splitList(sizes, personA)
@@ -70,8 +70,7 @@ def crossover(pop):
             newPop.append(childA)
             newPop.append(childB)
 
-    pop = newPop
-    return pop
+    return newPop
 
 
 def splitList(sizes, list):
@@ -99,21 +98,22 @@ def mutation(person):
 
 
 if __name__ == '__main__':
-    currPop = initialisePopValues()
+    perfect_condition = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
+                         '1', '1', '1', '1', '1', '1', '1', '1', '1', '1']
+    initialPop = initialisePopValues()
     avg = 0
+
+    pop = initialPop
     # Here will be loop until convergence
-    while avg < 350:
-        fitness = calcFitness()
+    while avg < 390:
+        fitness = calcFitness(pop)
 
         fitness.pop(0)
-        bestPop = selection()
+        bestPop = selection(fitness)
 
-        perfect_condition = ['1', '1', '1', '1', '1', '1', '1', '1', '1', '1',
-                             '1', '1', '1', '1', '1', '1', '1', '1', '1', '1']
-        pop = crossover(currPop)
+        pop = crossover(bestPop)
 
         # Takes each member of the population and mutates with set probability
         for i in range(len(pop)):
             if decision(probOfMutation):
                 pop[i] = mutation(pop[i])
-
