@@ -1,7 +1,6 @@
 import random
 from itertools import chain
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 
 stringLen = 20
@@ -166,7 +165,7 @@ def method(num):
     title = ""
 
     # Here will be loop until convergence
-    while avg < 30:
+    while avg < 20:
 
         if num == 1:
             popFit = calcFitness(pop)
